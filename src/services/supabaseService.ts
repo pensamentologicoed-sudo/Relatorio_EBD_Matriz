@@ -37,6 +37,7 @@ export interface ReportData {
   visitors: number;
   bibles: number;
   offer: number;
+  filled_by: string;
 }
 
 // =========================
@@ -125,7 +126,8 @@ export const supabaseService = {
 
         visitors: data.visitors,
         bibles: data.bibles,
-        offer: data.offer
+        offer: data.offer,
+        filled_by: data.filled_by
       };
 
       console.log("📤 Enviando para Supabase:", payload);

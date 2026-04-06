@@ -139,6 +139,7 @@ export default function Rooms() {
                   <th className="p-3 border-b border-zinc-100 text-center">Visit.</th>
                   <th className="p-3 border-b border-zinc-100 text-center">Bíb.</th>
                   <th className="p-3 border-b border-zinc-100 text-right">Oferta</th>
+                  <th className="p-3 border-b border-zinc-100 text-center">Responsável</th>
                   <th className="p-3 border-b border-zinc-100 text-center font-black text-zinc-900">Total</th>
                 </tr>
               </thead>
@@ -178,6 +179,7 @@ export default function Rooms() {
                         <td className="p-3 text-center text-zinc-600">{report.visitors}</td>
                         <td className="p-3 text-center text-zinc-600">{report.bibles}</td>
                         <td className="p-3 text-right text-emerald-600 font-medium">R$ {report.offer?.toFixed(2) || "0.00"}</td>
+                        <td className="p-3 text-center text-zinc-500 italic truncate max-w-[80px]">{report.filled_by || "-"}</td>
                         <td className="p-3 text-center text-zinc-900 font-bold bg-zinc-50/30">{tPresent}</td>
                       </tr>
                     );
@@ -223,6 +225,7 @@ export default function Rooms() {
                         <span className="text-sm">R$ {totals.offer.toFixed(0)}</span>
                       </div>
                     </td>
+                    <td className="p-3"></td>
                     <td className="p-3 text-center text-emerald-400">
                       <div className="flex flex-col">
                         <span className="text-[8px] opacity-50 font-medium uppercase">Total Geral</span>

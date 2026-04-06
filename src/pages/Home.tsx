@@ -19,6 +19,7 @@ export default function Home() {
   const [visitors, setVisitors] = useState<string>("");
   const [bibles, setBibles] = useState<string>("");
   const [offer, setOffer] = useState<string>("");
+  const [filledBy, setFilledBy] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const isConfigured = !!getSupabase();
 
@@ -64,6 +65,7 @@ export default function Home() {
         visitors: Number(visitors) || 0,
         bibles: Number(bibles) || 0,
         offer: Number(offer) || 0,
+        filled_by: filledBy,
       });
       alert("Dados enviados com sucesso!");
       // Reset fields after success
@@ -74,6 +76,7 @@ export default function Home() {
       setVisitors("");
       setBibles("");
       setOffer("");
+      setFilledBy("");
       setSelectedRoom("");
       setSelectedLesson("");
       console.log("Campos resetados após sucesso.");
@@ -422,8 +425,29 @@ export default function Home() {
                   </div>
                 )}
 
-                {/* Resumo de Cálculos */}
+                {/* 10. Quem Preencheu */}
                 {((isSecretaria && bibles) || (!isSecretaria && offer)) && (
+                  <div className="space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
+                    <label className="block text-sm font-semibold text-zinc-700 ml-1">
+                      {isSecretaria ? "9" : "11"}. Quem Preencheu
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        value={filledBy}
+                        onChange={(e) => setFilledBy(e.target.value)}
+                        placeholder="Seu nome"
+                        className="w-full p-4 pl-12 bg-white rounded-2xl border border-zinc-200 shadow-sm focus:ring-2 focus:ring-zinc-900 focus:border-transparent outline-none transition-all text-zinc-800 font-medium"
+                      />
+                      <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none text-zinc-400">
+                        <UserCircle size={20} />
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Resumo de Cálculos */}
+                {((isSecretaria && bibles) || (!isSecretaria && offer)) && filledBy && (
                   <div className="grid grid-cols-2 gap-4 animate-in fade-in zoom-in duration-500">
                     <div className="p-4 bg-zinc-50 rounded-2xl border border-zinc-100">
                       <p className="text-xs text-zinc-500 font-medium uppercase tracking-wider mb-1">Total Matriculados</p>
@@ -439,7 +463,7 @@ export default function Home() {
                 )}
 
                 {/* Botões de Ação */}
-                {((isSecretaria && bibles) || (!isSecretaria && offer)) && (
+                {((isSecretaria && bibles) || (!isSecretaria && offer)) && filledBy && (
                   <div className="space-y-3 pt-2">
                     <button
                       onClick={handleSendToSupabase}

@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { PageContainer } from "../components/PageContainer";
-import { FileText, Save, CheckCircle2, Users, UserCheck, UserPlus, Book, Coins, Loader2 } from "lucide-react";
+import { FileText, Save, CheckCircle2, Users, UserCheck, UserPlus, Book, Coins, Loader2, UserCircle } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { getRoomName } from "../constants";
 import { supabaseService, ReportData } from "../services/supabaseService";
@@ -71,7 +71,8 @@ export default function Report() {
         students_present: reportData?.students_present || 0,
         visitors: reportData?.visitors || 0,
         bibles: reportData?.bibles || 0,
-        offer: reportData?.offer || 0
+        offer: reportData?.offer || 0,
+        filled_by: reportData?.filled_by || ""
       });
 
       setShowSuccess(true);
@@ -123,6 +124,7 @@ export default function Report() {
               <StatItem icon={Users} label="Visitantes" value={reportData.visitors} colorClass="text-zinc-400" />
               <StatItem icon={Book} label="Bíblias" value={reportData.bibles} colorClass="text-amber-400" />
               <StatItem icon={Coins} label="Oferta" value={`R$ ${reportData.offer?.toFixed(2) || "0.00"}`} colorClass="text-emerald-400" />
+              <StatItem icon={UserCircle} label="Quem Preencheu" value={reportData.filled_by || "Não informado"} colorClass="text-zinc-400" />
 
               <div className="md:col-span-2 mt-2 p-4 bg-zinc-900 rounded-2xl flex justify-between items-center text-white">
                 <span className="font-bold">TOTAL GERAL</span>
