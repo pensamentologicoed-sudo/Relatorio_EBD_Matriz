@@ -119,8 +119,10 @@ export default function Report() {
             </div>
           ) : reportData ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <StatItem icon={UserPlus} label="Professores Matriculados" value={reportData.teachers_enrolled} colorClass="text-zinc-400" />
               <StatItem icon={UserCheck} label="Professores Presentes" value={reportData.teachers_present} colorClass="text-blue-400" />
-              <StatItem icon={UserPlus} label="Alunos Presentes" value={reportData.students_present} colorClass="text-purple-400" />
+              <StatItem icon={Users} label="Alunos Matriculados" value={reportData.students_enrolled} colorClass="text-zinc-400" />
+              <StatItem icon={UserCheck} label="Alunos Presentes" value={reportData.students_present} colorClass="text-purple-400" />
               <StatItem icon={Users} label="Visitantes" value={reportData.visitors} colorClass="text-zinc-400" />
               <StatItem icon={Book} label="Bíblias" value={reportData.bibles} colorClass="text-amber-400" />
               <StatItem icon={Coins} label="Oferta" value={`R$ ${reportData.offer?.toFixed(2) || "0.00"}`} colorClass="text-emerald-400" />

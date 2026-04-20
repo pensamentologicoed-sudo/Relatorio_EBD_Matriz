@@ -134,8 +134,10 @@ export default function Rooms() {
               <thead>
                 <tr className="bg-zinc-50/50 text-[10px] uppercase tracking-wider text-zinc-500 font-bold">
                   <th className="p-3 border-b border-zinc-100">Sala</th>
-                  <th className="p-3 border-b border-zinc-100 text-center">Matr.</th>
-                  <th className="p-3 border-b border-zinc-100 text-center">Pres.</th>
+                  <th className="p-3 border-b border-zinc-100 text-center">Prof. Matr.</th>
+                  <th className="p-3 border-b border-zinc-100 text-center">Prof. Pres.</th>
+                  <th className="p-3 border-b border-zinc-100 text-center">Aluno Matr.</th>
+                  <th className="p-3 border-b border-zinc-100 text-center">Aluno Pres.</th>
                   <th className="p-3 border-b border-zinc-100 text-center">Visit.</th>
                   <th className="p-3 border-b border-zinc-100 text-center">Bíb.</th>
                   <th className="p-3 border-b border-zinc-100 text-right">Oferta</th>
@@ -159,9 +161,7 @@ export default function Rooms() {
                 ) : (
                   reports.map((report) => {
                     const roomName = ROOMS.find(r => r.id === report.room_id)?.name || report.room_id;
-                    const presPA = (report.teachers_present || 0) + (report.students_present || 0);
-                    const tEnrolled = (report.teachers_enrolled || 0) + (report.students_enrolled || 0);
-                    const tPresent = presPA + (report.visitors || 0);
+                    const tPresent = (report.teachers_present || 0) + (report.students_present || 0) + (report.visitors || 0);
                     
                     return (
                       <tr 
@@ -174,8 +174,10 @@ export default function Rooms() {
                           {roomName}
                           <FileText size={12} className="opacity-0 group-hover:opacity-40 transition-opacity ml-auto" />
                         </td>
-                        <td className="p-3 text-center text-zinc-600">{tEnrolled}</td>
-                        <td className="p-3 text-center text-zinc-600">{presPA}</td>
+                        <td className="p-3 text-center text-zinc-600 font-medium">{report.teachers_enrolled}</td>
+                        <td className="p-3 text-center text-zinc-600 font-bold bg-zinc-50/10">{report.teachers_present}</td>
+                        <td className="p-3 text-center text-zinc-600 font-medium">{report.students_enrolled}</td>
+                        <td className="p-3 text-center text-zinc-600 font-bold bg-zinc-50/10">{report.students_present}</td>
                         <td className="p-3 text-center text-zinc-600">{report.visitors}</td>
                         <td className="p-3 text-center text-zinc-600">{report.bibles}</td>
                         <td className="p-3 text-right text-emerald-600 font-medium">R$ {report.offer?.toFixed(2) || "0.00"}</td>
@@ -197,14 +199,26 @@ export default function Rooms() {
                     </td>
                     <td className="p-3 text-center">
                       <div className="flex flex-col">
-                        <span className="text-[8px] opacity-50 font-medium uppercase">Matriculados</span>
-                        <span className="text-sm">{totals.total_enrolled}</span>
+                        <span className="text-[8px] opacity-50 font-medium uppercase leading-tight">Prof.<br/>Matr.</span>
+                        <span className="text-sm">{totals.teachers_enrolled}</span>
                       </div>
                     </td>
                     <td className="p-3 text-center">
                       <div className="flex flex-col">
-                        <span className="text-[8px] opacity-50 font-medium uppercase">Presentes</span>
-                        <span className="text-sm">{totals.teachers_present + totals.students_present}</span>
+                        <span className="text-[8px] opacity-50 font-medium uppercase leading-tight">Prof.<br/>Pres.</span>
+                        <span className="text-sm">{totals.teachers_present}</span>
+                      </div>
+                    </td>
+                    <td className="p-3 text-center">
+                      <div className="flex flex-col">
+                        <span className="text-[8px] opacity-50 font-medium uppercase leading-tight">Aluno<br/>Matr.</span>
+                        <span className="text-sm">{totals.students_enrolled}</span>
+                      </div>
+                    </td>
+                    <td className="p-3 text-center">
+                      <div className="flex flex-col">
+                        <span className="text-[8px] opacity-50 font-medium uppercase leading-tight">Aluno<br/>Pres.</span>
+                        <span className="text-sm">{totals.students_present}</span>
                       </div>
                     </td>
                     <td className="p-3 text-center">
@@ -222,13 +236,56 @@ export default function Rooms() {
                     <td className="p-3 text-right">
                       <div className="flex flex-col">
                         <span className="text-[8px] opacity-50 font-medium uppercase">Ofertas</span>
-                        <span className="text-sm">R$ {totals.offer.toFixed(0)}</span>
+                        <span className="text-sm">R$ {totals.offer.toFixed(2)}</span>
                       </div>
                     </td>
-                    <td className="p-3"></td>
-                    <td className="p-3 text-center text-emerald-400">
+                    <td colSpan={2} className="p-3 text-center text-emerald-400 bg-white/5">
                       <div className="flex flex-col">
                         <span className="text-[8px] opacity-50 font-medium uppercase">Total Geral</span>
+                        <span className="text-sm">{totals.total_present}</span>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr className="bg-zinc-900 text-white font-bold border-t border-white/10">
+                    <td className="p-3 text-[10px] uppercase leading-tight">
+                      <div className="flex flex-col">
+                        <span className="opacity-50 font-medium text-[8px]">Resumo</span>
+                        <span className="text-emerald-400">GERAL</span>
+                      </div>
+                    </td>
+                    <td colSpan={2} className="p-3 text-center border-l border-white/5">
+                      <div className="flex flex-col">
+                        <span className="text-[8px] opacity-50 font-medium uppercase leading-tight">Total de<br/>Matrícula</span>
+                        <span className="text-sm">{totals.total_enrolled}</span>
+                      </div>
+                    </td>
+                    <td colSpan={2} className="p-3 text-center border-l border-white/5">
+                      <div className="flex flex-col">
+                        <span className="text-[8px] opacity-50 font-medium uppercase leading-tight">Total Presentes<br/>(Prof. e Alu.)</span>
+                        <span className="text-sm">{totals.teachers_present + totals.students_present}</span>
+                      </div>
+                    </td>
+                    <td className="p-3 text-center border-l border-white/5">
+                      <div className="flex flex-col">
+                        <span className="text-[8px] opacity-50 font-medium uppercase leading-tight">Total<br/>Visitantes</span>
+                        <span className="text-sm">{totals.visitors}</span>
+                      </div>
+                    </td>
+                    <td className="p-3 text-center border-l border-white/5">
+                      <div className="flex flex-col">
+                        <span className="text-[8px] opacity-50 font-medium uppercase leading-tight">Total<br/>Bíblias</span>
+                        <span className="text-sm">{totals.bibles}</span>
+                      </div>
+                    </td>
+                    <td className="p-3 text-right border-l border-white/5">
+                      <div className="flex flex-col">
+                        <span className="text-[8px] opacity-50 font-medium uppercase leading-tight">Total de<br/>Ofertas</span>
+                        <span className="text-sm text-emerald-400">R$ {totals.offer.toFixed(2)}</span>
+                      </div>
+                    </td>
+                    <td colSpan={2} className="p-3 text-center text-emerald-400 border-l border-white/5 bg-white/5">
+                      <div className="flex flex-col">
+                        <span className="text-[8px] opacity-50 font-medium uppercase leading-tight text-white/50">Total Geral<br/>(Prof.+Alu.+Visit.)</span>
                         <span className="text-sm">{totals.total_present}</span>
                       </div>
                     </td>
@@ -247,8 +304,8 @@ export default function Rooms() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
             {[
               { label: "Presentes", rooms: highlights.maxPresent, color: "text-blue-400" },
-              { label: "Visitantes", rooms: highlights.maxVisitors, color: "text-purple-400" },
               { label: "Bíblias", rooms: highlights.maxBibles, color: "text-amber-400" },
+              { label: "Visitantes", rooms: highlights.maxVisitors, color: "text-purple-400" },
               { label: "Ofertas", rooms: highlights.maxOffer, color: "text-emerald-400" },
             ].map((item, idx) => (
               <div key={idx} className="bg-zinc-900 p-4 rounded-2xl border border-zinc-800 shadow-xl flex flex-col gap-1 h-full">
